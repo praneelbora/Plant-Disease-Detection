@@ -14,6 +14,7 @@ net = cv.dnn.readNet("yolov3_training_last.weights", "yolov3_testing.cfg")
 classes = ["Rust"]
 
 root= Tk()
+root.title("Plant Disease Detector")
 root.geometry("1006x572")
 file=()
 
@@ -55,7 +56,7 @@ def clear():
 
 def open():
     global img
-    file= filedialog.askopenfilenames(parent=root, title="Select A File", filetypes=(("jpg files", ".jpg"), ("all files", ".")))
+    file= filedialog.askopenfilenames(parent=root, title="Select Files", filetypes=(("jpg files", ".jpg"), ("all files", ".")))
 
     print(root.splitlist(file))
     clear()
@@ -66,7 +67,12 @@ def open():
     button_next= Button(root, text=">>", command= lambda: next(2)).grid(row=1, column=4, pady=10)
     button_new= Button(root, text="Next", command= new).grid(row=1, column=3)
 
-    my_Label= Label(image=final[0]).grid(row=0,column=0, columnspan=5)  
+    my_Label= Label(image=final[0]).grid(row=0,column=0, columnspan=5)
+
+    if detect[0]==0:
+        Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
+    else:  
+        Label(root,text="Rust Disease", font='Helvetica 10 bold', fg="#621D1D").grid(row=1, column=0, columnspan=5)
 
     status= Label(root, text=f"Image 1 of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E)
     status.grid(row=2, column=0, columnspan=5, sticky=W+E)
@@ -98,9 +104,9 @@ def next(n):      #next button function
     Label(root, text=f"Image "+ str(n) +" of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E).grid(row=2, column=0, columnspan=5, sticky=W+E)
 
     if detect[n-1]==1:
-        Label(root,text="Rust Disease", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
+        Label(root,text="Rust Disease", font='Helvetica 10 bold', fg="#621D1D").grid(row=1, column=0, columnspan=5)
     else:
-        Label(root,text="Healthy Plant", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
+        Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
 
 def back(n):
@@ -123,17 +129,16 @@ def back(n):
     Label(root, text=f"Image "+ str(n) +" of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E).grid(row=2, column=0, columnspan=5, sticky=W+E)
 
     if detect[n-1]==1:
-        Label(root,text="Rust Disease", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
+        Label(root,text="Rust Disease", font='Helvetica 10 bold', fg="#621D1D").grid(row=1, column=0, columnspan=5)
     else:
-        Label(root,text="Healthy Plant", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
+        Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
     
 def new():
     global pop
     global rusty
     pop= Toplevel(root)
-    pop.title("My Popup")
-    #pop.config(bg="white")
+    pop.title("Treatments and Prevention")
     pop.geometry("600x500")
     
     Label(pop, text="What is Rust Disease?", font='Helvetica 12 bold').pack(anchor=W)
@@ -145,9 +150,11 @@ def new():
     Label(pop, text="Rust can be one of the most difficult plant diseases to control once established, but there are some things you ").pack(anchor=W)
     Label(pop, text="can do to both control and prevent rust on plants.").pack(anchor=W)
     Label(pop, text="").pack()
+    
     rusty = ImageTk.PhotoImage(Image.open("rusty.png"))
     Label(pop,image=rusty).pack()
-    Label(pop, text="\n\nClick Below for Treatment & Prevention ", font='Helvetica 7 bold').pack()
+
+    Label(pop, text="\n\nClick Below for Treatment & Prevention ", font='Helvetica 8 bold').pack()
     Button(pop,text="CURE",command=clear_frame).pack()
 
 
@@ -198,11 +205,12 @@ def file_found(file):
 
         indexes = cv.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
         print(indexes)
+
         if len(indexes)>0:
             detect.append(1)
         else:
             detect.append(0)
-
+            
         font = cv.FONT_HERSHEY_PLAIN
         for i in range(len(boxes)):
             if i in indexes:
@@ -217,11 +225,5 @@ def file_found(file):
         re=temp1.resize(size)
         temp2 = ImageTk.PhotoImage(re)
         final.append(temp2)
-
-        if len(indexes)>0:
-            Label(root,text="Rust Disease", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
-        else:
-            Label(root,text="Healthy Plant", font='Helvetica 10 bold').grid(row=1, column=0, columnspan=5)
-        
 
 root.mainloop()
