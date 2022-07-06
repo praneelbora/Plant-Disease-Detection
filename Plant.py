@@ -1,11 +1,12 @@
-from ctypes import alignment
-from glob import glob
-from os import popen
 from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk, Image
 import cv2 as cv
 import numpy as np
+from ctypes import alignment
+from glob import glob
+from os import popen
+
 
 
 # Load Yolo
@@ -17,19 +18,18 @@ classes = ["Rust"]
 root= Tk()
 root.title("Plant Disease Detector")
 root.geometry("1006x572")
-file=()
 
-final=[]
-size=(1000,500)
-temp=0
+file=()             #Stores all the file locations of all images selected
+final=[]            #Stores all the image processed images in Tk format
+size=(1000,500)     #Size of the main window and the size images are resized to
 
 
-intro = ImageTk.PhotoImage(Image.open("intro.png"))
+
+intro = ImageTk.PhotoImage(Image.open("intro.png"))     #PRrints the intro design
 Label(root,image=intro).grid(row=0,column=0)
 
 
-
-def clear_frame():
+def display_cure():
     for widgets in pop.winfo_children():
         widgets.destroy()
     
@@ -72,7 +72,7 @@ def open():
     button_back= Button(root, text="<<", command=back, state=DISABLED).grid(row=1, column=0)
     button_exit= Button(root, text="EXIT", command=root.quit).grid(row=1, column=1)
     button_next= Button(root, text=">>", command= lambda: next(2)).grid(row=1, column=4, pady=10)
-    button_new= Button(root, text="Next", command= new).grid(row=1, column=3)
+    button_new= Button(root, text="Next", command= disease).grid(row=1, column=3)
 
     my_Label= Label(image=final[0]).grid(row=0,column=0, columnspan=5)
 
@@ -83,7 +83,6 @@ def open():
 
     status= Label(root, text=f"Image 1 of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E)
     status.grid(row=2, column=0, columnspan=5, sticky=W+E)
-    temp=1
 
 
 def next(n):      #next button function
@@ -136,7 +135,7 @@ def back(n):
         Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
     
-def new():
+def disease():
     global pop
     global rusty
     pop= Toplevel(root)
@@ -157,15 +156,15 @@ def new():
     Label(pop,image=rusty).pack()
 
     Label(pop, text="\n\nClick Below for Treatment & Prevention ", font='Helvetica 8 bold').pack()
-    Button(pop,text="CURE",command=clear_frame).pack()
+    Button(pop,text="CURE",command=display_cure).pack()
 
-open_btn= Button(root, text="Open file", command=open,anchor=E).place(x=485,y=525)    #starts executing program on clicking open file
+open_btn= Button(root,text="Open file",command=open,anchor=E).place(x=485,y=525)    #starts executing program on clicking open file
 
 # Machine Learning
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
 colors = (150,200,75)
-detect=[]
+detect=[]           #store 0 for healthy, 1 for rust
 
 def ml(file):
     for img_path in file:
@@ -222,10 +221,10 @@ def ml(file):
                 cv.rectangle(img, (x, y), (x + w, y + h), color, 2)
                 cv.putText(img, label, (x, y + 30), font, 3, color, 2)
 
-        temp0 = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-        temp1 = Image.fromarray(temp0)
-        re=temp1.resize(size)
-        temp2 = ImageTk.PhotoImage(re)
-        final.append(temp2)
+        color_change = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        format_change = Image.fromarray(color_change)
+        size_change=format_change.resize(size)
+        tk_image = ImageTk.PhotoImage(size_change)
+        final.append(tk_image)
 
 root.mainloop()
