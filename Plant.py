@@ -22,6 +22,7 @@ root.geometry("1006x572")
 file=()             #Stores all the file locations of all images selected
 final=[]            #Stores all the image processed images in Tk format
 size=(1000,500)     #Size of the main window and the size images are resized to
+<<<<<<< HEAD
 
 
 
@@ -29,6 +30,42 @@ intro = ImageTk.PhotoImage(Image.open("intro.png"))     #Prints the intro design
 Label(root,image=intro).grid(row=0,column=0)
 
 
+=======
+
+
+
+intro = ImageTk.PhotoImage(Image.open("intro.png"))     #PRrints the intro design
+Label(root,image=intro).grid(row=0,column=0)
+
+
+def display_cure():
+    for widgets in pop.winfo_children():
+        widgets.destroy()
+    
+    Label(pop, text="Rust treatment and control", font='Helvetica 12 bold').pack(anchor=W)
+    Label(pop, text="~Remove and destroy all leaves and plant parts affected by rust.").pack(anchor=W)
+    Label(pop, text="~You might have to destroy badly infected plants completely to prevent them infecting other plants of the same").pack(anchor=W)
+    Label(pop, text="species.").pack(anchor=W)
+    Label(pop, text="~Spray with a suitable rust control product containing fungicide, repeating as recommended. There are no ").pack(anchor=W)
+    Label(pop, text="chemicals approved for control of diseases on edible plants.").pack(anchor=W)
+    Label(pop, text="~Lawn rust treatment: Mow regularly to reduce the number of affected leaves, remove the clippings and improve ").pack(anchor=W)
+    Label(pop, text="air circulation by pruning overhanging trees and shrubs.").pack(anchor=W)
+    Label(pop, text="~Pear rust treatment includes removing any juniper bushes in your garden, as they can host the fungus which ").pack(anchor=W)
+    Label(pop, text="causes rust on pear trees.").pack(anchor=W)
+    Label(pop, text="\nHow to prevent rust disease?", font='Helvetica 12 bold').pack(anchor=W)
+    Label(pop, text="~Clear debris away from underneath plants likely to be affected by rust, particularly before the winter, ").pack(anchor=W)
+    Label(pop, text="because the fungus overwinters on plant debris.").pack(anchor=W)
+    Label(pop, text="~Grow leeks and other members of the onion family on a fresh site each year.").pack(anchor=W)
+    Label(pop, text="~Keep plants growing as strongly as possible, without any stress and avoid using high nitrogen fertilisers on ").pack(anchor=W)
+    Label(pop, text="susceptible plants because this encourages soft growth which can be more easily infected. High potash feeds ").pack(anchor=W)
+    Label(pop, text="help to strengthen plants and prevent rust disease from taking hold.").pack(anchor=W)
+    Label(pop, text="~Allow enough space around plants to improve air circulation as rust thrives in damp conditions.").pack(anchor=W)
+    Label(pop, text="~Remove weeds which might harbour rust. For example, willow herb is known to host fuchsia rust, while ").pack(anchor=W)
+    Label(pop, text="hollyhock rust can spend some of its life on wild mallow.").pack(anchor=W)
+    Label(pop, text="  ").pack()
+    Button(pop, text="EXIT", command=root.quit).pack()
+    
+>>>>>>> 34b121683513ddad658e37af450d12a45bbddc52
 
 def clear():
     for widgets in root.winfo_children():
@@ -56,6 +93,10 @@ def open():
 
     status= Label(root, text=f"Image 1 of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E)
     status.grid(row=2, column=0, columnspan=5, sticky=W+E)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 34b121683513ddad658e37af450d12a45bbddc52
 
 def next(n):      #next button function
     global my_Label
@@ -105,6 +146,10 @@ def back(n):
     else:
         Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 34b121683513ddad658e37af450d12a45bbddc52
 def disease():
     global pop
     global rusty
@@ -128,6 +173,7 @@ def disease():
     Label(pop, text="\n\nClick Below for Treatment & Prevention ", font='Helvetica 8 bold').pack()
     Button(pop,text="CURE",command=display_cure).pack()
 
+<<<<<<< HEAD
 def display_cure():
     for widgets in pop.winfo_children():
         widgets.destroy()
@@ -158,6 +204,10 @@ def display_cure():
     
 open_btn= Button(root,text="Open file",command=open,anchor=E).place(x=485,y=525)    #starts executing program on clicking open file
 
+=======
+open_btn= Button(root,text="Open file",command=open,anchor=E).place(x=485,y=525)    #starts executing program on clicking open file
+
+>>>>>>> 34b121683513ddad658e37af450d12a45bbddc52
 # Machine Learning
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
