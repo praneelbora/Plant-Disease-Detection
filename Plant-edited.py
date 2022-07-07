@@ -8,9 +8,9 @@ from glob import glob
 from os import popen
 
 
-
 # Load Yolo
 net = cv.dnn.readNet("yolov3_training_last.weights", "yolov3_testing.cfg")
+#dnn means deep neural network
 
 # Name custom object
 classes = ["Rust"]
@@ -24,17 +24,15 @@ final=[]            #Stores all the image processed images in Tk format
 size=(1000,500)     #Size of the main window and the size images are resized to
 
 
-
-intro = ImageTk.PhotoImage(Image.open("intro.png"))     #Prints the intro design
+intro = ImageTk.PhotoImage(Image.open("intro.png"))     #PRrints the intro design
 Label(root,image=intro).grid(row=0,column=0)
-
 
 
 def clear():
     for widgets in root.winfo_children():
         widgets.destroy()
 
-def open():
+def open():                 #When user clicks on open file on tk window
     
     file= filedialog.askopenfilenames(parent=root, title="Select Files", filetypes=(("jpg files", ".jpg"), ("all files", ".")))
 
@@ -49,12 +47,12 @@ def open():
 
     my_Label= Label(image=final[0]).grid(row=0,column=0, columnspan=5)
 
-    if detect[0]==0:
+    if detect[0]==0:        # 1 in detect list means rust present
         Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
     else:  
         Label(root,text="Rust Disease", font='Helvetica 10 bold', fg="#621D1D").grid(row=1, column=0, columnspan=5)
 
-    status= Label(root, text=f"Image 1 of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E)
+    status= Label(root, text=f"Image 1 of "+ str(len(final)), bd=1, relief=SUNKEN, anchor=E)    #displaying numberth of image on tk window on left bottom
     status.grid(row=2, column=0, columnspan=5, sticky=W+E)
 
 def next(n):      #next button function
@@ -81,7 +79,7 @@ def next(n):      #next button function
     else:
         Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
-def back(n):
+def back(n):        # Back Button
     global my_Label
     global button_next
     global button_back
@@ -105,12 +103,12 @@ def back(n):
     else:
         Label(root,text="Healthy Plant", font='Helvetica 10 bold', fg="#284737").grid(row=1, column=0, columnspan=5)
 
-def disease():
+def disease():          #Information about the diseases found
     global pop
     global rusty
     pop= Toplevel(root)
     pop.title("Treatments and Prevention")
-    pop.geometry("600x500")
+    pop.geometry("700x500")
     
     Label(pop, text="What is Rust Disease?", font='Helvetica 12 bold').pack(anchor=W)
     Label(pop, text="Rust disease is an obligate fungal parasite that grows on a wide variety of plants useful to humans. These fungi").pack(anchor=W)
@@ -128,7 +126,7 @@ def disease():
     Label(pop, text="\n\nClick Below for Treatment & Prevention ", font='Helvetica 8 bold').pack()
     Button(pop,text="CURE",command=display_cure).pack()
 
-def display_cure():
+def display_cure():         #To display cure on the last tk window
     for widgets in pop.winfo_children():
         widgets.destroy()
     
@@ -156,17 +154,16 @@ def display_cure():
     Button(pop, text="EXIT", command=root.quit).pack()
 
     
-open_btn= Button(root,text="Open file",command=open,anchor=E).place(x=485,y=525)    #starts executing program on clicking open file
+open_btn= Button(root,text="Open file",command=open).place(x=485,y=525)    #starts executing program on clicking open file
 
 # Machine Learning
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
 colors = (150,200,75)
-detect=[]           #store 0 for healthy, 1 for rust
+detect=[]           #store 0 for healthy, 1 for rust || we defined
 
 def ml(file):
     for img_path in file:
-
         # Loading image
         img = cv.imread(img_path)
         img = cv.resize(img, None, fx=0.4, fy=0.4)
